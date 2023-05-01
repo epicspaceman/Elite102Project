@@ -23,41 +23,6 @@ def createAccount():
 
     print(f"Your User ID is {newID}.")
 
-#Log in functionality
-
-
-
-
-def withdraw(userID):
-    accountChoice = input("Which account would you like to access? ")
-    account = ""
-    if accountChoice == "Checking":
-        account = "userCheckingBalance"
-    elif accountChoice == "Savings":
-        account = "userSavingsBalance"
-    else:
-        print("Please choose a valid account type.")
-        withdraw(userID)
-
-    amount = input("How much would you like to withdrawl? ")
-    withdrawl = (f"UPDATE accounts SET {account} = {account} - {amount} WHERE userID = {userID}")
-    cursor.execute(withdrawl)
-
-def deposit(userID):
-    accountChoice = input("Which account would you like to access? ")
-    account = ""
-    if accountChoice == "Checking":
-        account = "userCheckingBalance"
-    elif accountChoice == "Savings":
-        account = "userSavingsBalance"
-    else:
-        print("Please choose a valid account type.")
-        deposit(userID)
-
-    amount = input("How much would you like to withdrawl? ")
-    deposit = (f"UPDATE accounts SET {account} = {account} + {amount} WHERE userID = {userID}")
-    cursor.execute(deposit)
-
 def delAcc(userID):
     password = input("Enter your password: ")
     grabUserInfo = (f"SELECT userPassword FROM users WHERE userID={userID}")
