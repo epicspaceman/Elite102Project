@@ -6,7 +6,7 @@ window = tkinter.Tk()
 window.title("South Austin Bank")
 window.geometry('340x440')
 
-userID = 1
+userID = 0
 
 def logIn(loginID, logPass):
     try:
@@ -168,6 +168,21 @@ def delAcc(userID, password):
     connection.commit()
     connection.close()
 
+def modifyAccount(userID, newfName, newlName):
+    connection = mysql.connector.connect(user = 'root', database = 'banking_app', password = '!098c2cPa$$word')
+    cursor = connection.cursor()
+    print(userID)
+
+    modAcc = (f"UPDATE users SET userFirstName = '{newfName}', userLastName = '{newlName}' WHERE userID = {userID}")
+    cursor.execute(modAcc)
+
+    messagebox.showinfo(title="", message=f"Hello, {newfName} {newlName}")
+    accountPage()
+
+    cursor.close()
+    connection.commit()
+    connection.close()
+
 def refreshBal():
     checking_bal.config(text=checkChecking(userID))
     savings_bal.config(text=checkSavings(userID))
@@ -207,6 +222,7 @@ edit_bal_button = tkinter.Button(frame, text="Edit Balances", command= lambda : 
 logout_button = tkinter.Button(frame, text="Log Out", command= lambda : logInPage())
 del_acc_button = tkinter.Button(frame, text="Delete Account", command= lambda : delAccPage())
 refreshBal_button = tkinter.Button(frame, text="Refresh Accounts", command= lambda : refreshBal())
+mod_account_button = tkinter.Button(frame, text="Modify Acount Info", command= lambda : modAccPage())
 
 #add edit balance widgets
 edit_balances_label = tkinter.Label(frame, text="Edit Balances")
@@ -218,7 +234,6 @@ action_label = tkinter.Label(frame, text="Action")
 action_entry = tkinter.OptionMenu(frame, variable2, *OPTIONS2)
 perform_button = tkinter.Button(frame, text="Submit", command= lambda : editBalances(userID, variable1.get(), amount_entry.get(), variable2.get()))
 cancel_edit_button = tkinter.Button(frame, text="Cancel", command= lambda : accountPage())
-
 
 #create account widgets
 create_account_label = tkinter.Label(frame, text="Create Account")
@@ -237,6 +252,15 @@ confirm_pass_label = tkinter.Label(frame, text="Confirm Password")
 confirm_pass_entry = tkinter.Entry(frame, show="*")
 delete_button = tkinter.Button(frame, text="Confirm Deletion", command= lambda : delAcc(userID, confirm_pass_entry.get()))
 cancel_del_button = tkinter.Button(frame, text="Cancel", command= lambda : accountPage())
+
+#mod acc widgets
+mod_acc_label = tkinter.Label(frame, text="Modify Information")
+new_fname_label = tkinter.Label(frame, text="New First Name")
+new_fname_entry = tkinter.Entry(frame)
+new_lname_label = tkinter.Label(frame, text="New Last Name")
+new_lname_entry = tkinter.Entry(frame)
+mod_acc_button = tkinter.Button(frame, text="Change", command= lambda : modifyAccount(userID, new_fname_entry.get(), new_lname_entry.get()))
+cancel_mod_button = tkinter.Button(frame, text="Cancel", command= lambda : accountPage())
 
 #clear widgets
 def clear_frame():
@@ -266,6 +290,7 @@ def accountPage():
     logout_button.grid(row=4, column=0, columnspan=2)
     del_acc_button.grid(row=5, column=0, columnspan=2)
     refreshBal_button.grid(row=6, column=0, columnspan=2)
+    mod_account_button.grid(row=7, column=0, columnspan=2)
 
 def editBalPage():
     clear_frame()
@@ -298,6 +323,16 @@ def delAccPage():
     confirm_pass_entry.grid(row=1, column=1)
     delete_button.grid(row=2, column=0, columnspan=2)
     cancel_del_button.grid(row=3, column=0, columnspan=2)
+
+def modAccPage():
+    clear_frame()
+    create_account_label.grid(row=0, column=0, columnspan=2)
+    new_fname_label.grid(row=1, column=0)
+    new_fname_entry.grid(row=1, column=1)
+    new_lname_label.grid(row=2, column=0)
+    new_lname_entry.grid(row=2, column=1)
+    mod_acc_button.grid(row=3, column=0, columnspan=2)
+    cancel_mod_button.grid(row=4, column=0, columnspan=2)
 
 
 
